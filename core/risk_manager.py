@@ -1,61 +1,42 @@
-from typing import Dict
+# core/risk_manager.py
+from typing import Dict, Optional
 
-def evaluate_risk(signal: Dict) -> Dict:
+DEFAULT_SETTINGS = {
+    "risk_pct": 1.0,          # риск на сделку в %
+    "leverage": 5,            # дефолтное плечо
+    "margin_mode": "ISOLATED",
+    "position_mode": "ONEWAY",
+}
+
+def evaluate_risk(signal: Dict, user_settings: Optional[Dict] = None) -> Dict:
     """
-    Рассчитывает RR, динамический риск (%) и подбирает плечо от 7x до 15x.
+    Дополняет сигнал расчётом RR и безопасными дефолтами.
+    НЕ требует наличия signal['risk'].
     """
+    s = {**DEFAULT_SETTINGS, **(user_settings or {})}
 
-    entry = signal["entry"]
-    tp = signal["tp"]
-    sl = signal["sl"]
+    entry = float(signal["entry"])
+    sl    = float(signal["sl"])
+    tp    = float(signal["tp"])
 
-    if signal["position"] == "LONG":
-        profit = tp - entry
-        risk = entry - sl
+    risk_per_unit = abs(entry - sl)
+    reward        = abs(tp - entry)
+    rr            = reward / (risk_per_unit + 1e-9)
+
+    if rr >= 2.0:
+        quality = f"✅ RR {rr:.2f}"
+    elif rr >= 1.2:
+        quality = f"⚠️ RR {rr:.2f}"
     else:
-        profit = entry - tp
-        risk = sl - entry
-
-    if risk <= 0:
-        rr_ratio = 0
-        signal.update({
-            "rr_ratio": 0,
-            "risk_percent": 0,
-            "recommended_leverage": 7,
-            "quality": "❌ Неверный стоп"
-        })
-        return signal
-
-    rr_ratio = round(profit / risk, 2)
-
-    # Подбор наилучшего плеча в диапазоне 7–15
-    best_leverage = 7
-    risk_percent = 0
-
-    for lev in range(7, 16):
-        percent = round((risk / entry) * 100 * lev, 2)
-        if percent <= 100:
-            best_leverage = lev
-            risk_percent = percent
-            break
-    else:
-        # если все плечи дают риск >100%, берём минимальное
-        best_leverage = 7
-        risk_percent = round((risk / entry) * 100 * best_leverage, 2)
-
-    # Оценка качества
-    if rr_ratio >= 2.0:
-        quality = "✅ Сделка: стоит входить"
-    elif rr_ratio >= 1.0:
-        quality = "⚠️ Сделка: средняя"
-    else:
-        quality = "❌ Сделка: невыгодная"
+        quality = f"❌ RR {rr:.2f}"
 
     signal.update({
-        "rr_ratio": rr_ratio,
-        "risk_percent": risk_percent,
-        "recommended_leverage": best_leverage,
-        "quality": quality
+        "rr_ratio": round(rr, 2),
+        "quality": quality,
+        # дефолтные трейдинг-настройки (не зависят от входящего signal)
+        "leverage": s["leverage"],
+        "risk_pct": s["risk_pct"],
+        "margin_mode": s["margin_mode"],
+        "position_mode": s["position_mode"],
     })
-
     return signal

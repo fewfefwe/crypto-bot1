@@ -1,0 +1,50 @@
+[
+  {
+    "signal_id": "APTUSDT:20250811224947",
+    "symbol": "APTUSDT",
+    "position": "SHORT",
+    "entry": 4.528,
+    "tp": 4.4646,
+    "sl": 4.5597,
+    "risk_pct": 1.0,
+    "leverage": 5,
+    "rr_ratio": 2.0,
+    "opened_at": "2025-08-12 01:49:48"
+  },
+  {
+    "signal_id": "ARBUSDT:20250811232218",
+    "symbol": "ARBUSDT",
+    "position": "SHORT",
+    "entry": 0.4383,
+    "tp": 0.4311,
+    "sl": 0.4419,
+    "risk_pct": 1.0,
+    "leverage": 5,
+    "rr_ratio": 2.0,
+    "opened_at": "2025-08-12 02:22:19"
+  },
+  {
+    "signal_id": "AVAXUSDT:20250811233716",
+    "symbol": "AVAXUSDT",
+    "position": "SHORT",
+    "entry": 22.802,
+    "tp": 22.5036,
+    "sl": 22.9512,
+    "risk_pct": 1.0,
+    "leverage": 5,
+    "rr_ratio": 2.0,
+    "opened_at": "2025-08-12 02:37:17"
+  },
+  {
+    "signal_id": "CRVUSDT:20250811235219",
+    "symbol": "CRVUSDT",
+    "position": "SHORT",
+    "entry": 0.9203,
+    "tp": 0.9038,
+    "sl": 0.9286,
+    "risk_pct": 1.0,
+    "leverage": 5,
+    "rr_ratio": 1.99,
+    "opened_at": "2025-08-12 02:52:19"
+  }
+]
