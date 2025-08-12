@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 
 # ---- Порог/настройки ----
 PROB_THRESHOLD = 0.60         # если используем твою NN
-SCORE_THRESHOLD = 68          # итоговый скор для сигнала (0..100)
+SCORE_THRESHOLD = 70          # итоговый скор для сигнала (0..100)
 MIN_CANDLES    = 220
 MAX_VOL_RATIO  = 20.0
 
