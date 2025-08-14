@@ -42,7 +42,7 @@ async def auto_signal_job(bot: Bot):
 
     try:
         all_pairs = api.get_usdt_pairs()
-        print(f"📊 Всего пар: {len(all_pairs)}")
+        print(f"📊 Всего валютных пар: {len(all_pairs)}")
 
         filtered = filter_by_volume(all_pairs)
         print(f"✅ После фильтра объёма: {len(filtered)}")
@@ -60,7 +60,7 @@ async def auto_signal_job(bot: Bot):
                     continue
 
                 print(f"→ Анализ пары: {symbol}")
-                ohlcv = api.get_ohlcv(symbol, interval="15", limit=220)
+                ohlcv = api.get_ohlcv(symbol, interval="60", limit=300)
                 if not ohlcv:
                     print("  ⚠️ Нет свечей — пропуск")
                     continue
